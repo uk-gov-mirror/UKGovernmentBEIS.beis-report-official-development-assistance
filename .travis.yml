@@ -15,9 +15,9 @@ jobs:
       echo "==== testing terrafrom ===="
       git clone https://github.com/tfutils/tfenv.git ~/.tfenv
       export PATH="$HOME/.tfenv/bin:$PATH"
+      /bin/bash install-terraform-provider-for-cf.sh
       cd terraform
       tfenv install
-      /bin/bash install-terraform-provider-for-cf.sh
       ls -la ~/.terraform.d/plugins/
       ls -la ~/.terraform.d/plugins/linux_amd64/
       echo "terraform init"
