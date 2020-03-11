@@ -16,7 +16,7 @@ then
   curl https://github.com/cloudfoundry-community/terraform-provider-cf/releases/download/v0.11.0/terraform-provider-cloudfoundry_linux_amd64 \
     -o ~/.terraform.d/plugins/linux_amd64/terraform-provider-cloudfoundry
   echo "4"
-  chmod +x ~/.terraform.d/plugins/linux_amd64
+  chmod u+x ~/.terraform.d/plugins/linux_amd64
   echo "5"
 
 
