@@ -15,37 +15,17 @@ jobs:
       echo "==== testing terrafrom ===="
       git clone https://github.com/tfutils/tfenv.git ~/.tfenv
       export PATH="$HOME/.tfenv/bin:$PATH"
+      cd terraform
       tfenv install
       /bin/bash install-terraform-provider-for-cf.sh
-      ls -la .terraform.d/plugins/
-      ls -la .terraform.d/plugins/linux_amd64/
+      ls -la ~/.terraform.d/plugins/
+      ls -la ~/.terraform.d/plugins/linux_amd64/
       echo "terraform init"
-      terraform init terraform
+      terraform init
       echo "terrform fmt"
-      terraform fmt  -diff -check -recursive terraform
+      terraform fmt  -diff -check -recursive
       echo "terraform validate"
-      terraform validate terraform
-      echo "==== linting our shell scripts ===="
-      docker network create test
-      docker run -d --name pg --network test -p 5432:5432 postgres:11.6
-      docker run -d \
-        --name test-container \
-        --network test \
-        -e RAILS_ENV=test \
-        -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true \
-        -e DATABASE_URL=postgres://postgres@pg:5432/roda_test \
-        -e TRAVIS="$TRAVIS" \
-        -e TRAVIS_JOB_ID="$TRAVIS_JOB_ID" \
-        -e TRAVIS_BRANCH="$TRAVIS_BRANCH" \
-        -e TRAVIS_PULL_REQUEST="$TRAVIS_PULL_REQUEST" \
-        -e COVERALLS_SERVICE_NAME=travis-ci \
-        -e COVERALLS_REPO_TOKEN="$COVERALLS_REPO_TOKEN" \
-        -e CI=true \
-        --env-file .env.example \
-        app/test /bin/bash -c "tail -f /dev/null"
-      docker exec test-container rake
-      docker exec test-container bundle exec brakeman
-      bash -c 'shopt -s globstar nullglob; shellcheck **/*.{sh,ksh,bash}'
+      terraform validate
       set +eu
 deploy:
 - provider: script
