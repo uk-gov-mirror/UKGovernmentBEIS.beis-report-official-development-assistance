@@ -17,16 +17,10 @@ jobs:
       /bin/bash install-terraform-provider-for-cf.sh
       cd terraform
       tfenv install
-      ls -la ~/.terraform.d/plugins/
-      ls -la ~/.terraform.d/plugins/linux_amd64/
-      echo "terraform init"
       terraform init
-      echo "terrform fmt"
       terraform fmt  -diff -check -recursive
-      echo "terraform validate"
       terraform validate
-      echo $?
-      echo "finished stuff"
+      cd ..
 deploy:
 - provider: script
   script: bash travis-docker-push.sh
