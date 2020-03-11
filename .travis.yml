@@ -11,7 +11,6 @@ jobs:
     env:
     - RAILS_ENV=test
     script: |
-      set -e
       echo "==== testing terrafrom ===="
       git clone https://github.com/tfutils/tfenv.git ~/.tfenv
       export PATH="$HOME/.tfenv/bin:$PATH"
@@ -26,7 +25,7 @@ jobs:
       terraform fmt  -diff -check -recursive
       echo "terraform validate"
       terraform validate
-      set +eu
+      echo "finished stuff"
 deploy:
 - provider: script
   script: bash travis-docker-push.sh
