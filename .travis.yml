@@ -17,8 +17,11 @@ jobs:
       export PATH="$HOME/.tfenv/bin:$PATH"
       tfenv install
       /bin/bash install-terraform-provider-for-cf.sh
+      echo "terraform init"
       terraform init terraform
+      echo "terrform fmt"
       terraform fmt  -diff -check -recursive terraform
+      echo "terraform validate"
       terraform validate terraform
       echo "==== linting our shell scripts ===="
       docker network create test
