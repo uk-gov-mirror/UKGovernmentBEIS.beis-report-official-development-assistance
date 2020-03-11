@@ -17,6 +17,8 @@ jobs:
       export PATH="$HOME/.tfenv/bin:$PATH"
       tfenv install
       /bin/bash install-terraform-provider-for-cf.sh
+      ls -la .terraform.d/plugins/
+      ls -la .terraform.d/plugins/linux_amd64/
       echo "terraform init"
       terraform init terraform
       echo "terrform fmt"
