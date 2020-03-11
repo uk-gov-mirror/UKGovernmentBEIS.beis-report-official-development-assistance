@@ -25,6 +25,7 @@ jobs:
       terraform fmt  -diff -check -recursive
       echo "terraform validate"
       terraform validate
+      echo $?
       echo "finished stuff"
 deploy:
 - provider: script
