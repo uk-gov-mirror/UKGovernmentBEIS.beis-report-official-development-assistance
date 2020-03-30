@@ -1,0 +1,12 @@
+// the autocomplete does not set a font, this only effects the autocomplete
+// items, so we set it here
+li.autocomplete__option {
+  @include govuk-font($size: 19);
+}
+
+// The styles for the dropdown arrow sets the z-index to -1 that seems to place
+// it behind the autocomplete, this may be a bug, but this is a workaround for
+// us
+.autocomplete__dropdown-arrow-down {
+  z-index: 0;
+}
