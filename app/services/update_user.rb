@@ -1,9 +1,10 @@
 class UpdateUser
-  attr_accessor :user, :organisation
+  attr_accessor :user, :organisation, :current_user
 
-  def initialize(user:, organisation: [])
+  def initialize(user:, organisation:, current_user:)
     self.user = user
     self.organisation = organisation
+    self.current_user = current_user
   end
 
   def call
@@ -18,6 +19,10 @@ class UpdateUser
         result.success = false
         Rails.logger.error("Error updating user #{user.email} to Auth0 during UpdateUser with #{e.message}.")
         raise ActiveRecord::Rollback
+      end
+
+      user.changed_attributes&.each do |key, value|
+        user.create_activity key: "user.update.#{key}", owner: current_user
       end
 
       user.save

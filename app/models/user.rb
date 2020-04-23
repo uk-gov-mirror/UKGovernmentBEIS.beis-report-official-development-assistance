@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   include PublicActivity::Common
+  include ActiveModel::Dirty
 
   belongs_to :organisation
   validates_presence_of :name, :email

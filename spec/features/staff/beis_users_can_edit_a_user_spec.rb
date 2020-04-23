@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "BEIS users can editing other users" do
+RSpec.feature "BEIS users can edit other users" do
   let!(:user) { create(:administrator, organisation: create(:organisation)) }
 
   before do
@@ -119,8 +119,32 @@ RSpec.feature "BEIS users can editing other users" do
       click_button I18n.t("form.user.submit")
 
       auditable_event = PublicActivity::Activity.find_by(trackable_id: target_user.id)
-      expect(auditable_event.key).to eq "user.update"
+      expect(auditable_event.key).to eq "user.update.email"
       expect(auditable_event.owner_id).to eq administrator_user.id
+    end
+  end
+
+  scenario "user activation & deactivation is tracked with public_activity" do
+    administrator_user = create(:beis_user)
+    authenticate!(user: administrator_user)
+
+    PublicActivity.with_tracking do
+      visit organisation_path(administrator_user.organisation)
+      click_on I18n.t("page_title.users.index")
+      find("tr", text: user.name).click_link("Edit")
+
+      choose I18n.t("form.user.active.inactive")
+      click_on I18n.t("generic.button.submit")
+
+      click_on I18n.t("generic.link.back")
+      find("tr", text: user.name).click_link("Edit")
+      choose I18n.t("form.user.active.active")
+      click_on I18n.t("generic.button.submit")
+
+      auditable_events = PublicActivity::Activity.where(trackable_id: user.id)
+      expect(auditable_events.map { |event| event.key }).to match_array ["user.update.active", "user.update.active"]
+      expect(auditable_events.map { |event| event.owner_id }.uniq).to eq [administrator_user.id]
+      expect(auditable_events.map { |event| event.trackable_id }.uniq).to eq [user.id]
     end
   end
 end

@@ -51,10 +51,9 @@ class Staff::UsersController < Staff::BaseController
     @user.active = params[:user][:active]
 
     if @user.valid?
-      result = UpdateUser.new(user: @user, organisation: organisation).call
+      result = UpdateUser.new(user: @user, organisation: organisation, current_user: current_user).call
 
       if result.success?
-        @user.create_activity key: "user.update", owner: current_user
         flash.now[:notice] = I18n.t("form.user.update.success")
         redirect_to user_path(@user)
       else
