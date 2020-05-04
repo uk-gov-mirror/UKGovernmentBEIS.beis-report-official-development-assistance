@@ -73,6 +73,32 @@ RSpec.feature "Users can create a fund level activity" do
       expect(activity.extending_organisation).to eql(user.organisation)
     end
 
+    context "when there is an exsiting activity with a nil identifier" do
+      scenario "successfully create a activity" do
+        visit organisation_path(user.organisation)
+        click_on(I18n.t("page_content.organisation.button.create_fund"))
+
+        visit organisation_path(user.organisation)
+        click_on(I18n.t("page_content.organisation.button.create_fund"))
+
+        fill_in_activity_form(level: "fund")
+
+        expect(page).to have_content I18n.t("form.fund.create.success")
+      end
+    end
+
+    context "when there is an exsiting activity with the same identifier" do
+      scenario "successfully create a activity" do
+        create(:activity, identifier: "A-Unique_Identifier")
+        visit organisation_path(user.organisation)
+        click_on(I18n.t("page_content.organisation.button.create_fund"))
+
+        fill_in_activity_form(level: "fund")
+
+        expect(page).to have_content I18n.t("form.fund.create.success")
+      end
+    end
+
     context "validations" do
       scenario "validation errors work as expected" do
         visit organisation_path(user.organisation)
