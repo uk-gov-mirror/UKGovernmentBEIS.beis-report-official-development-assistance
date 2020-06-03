@@ -12,9 +12,8 @@ setup_database()
 
 run_data_migrations()
 {
-  echo "Running data migrations…"
-  bundle exec rake data:migrate
-  echo "Finished running data migrations."
+  echo "Loading schema (pentest hotfix)…"
+  bundle exec rake db:schema:load
 }
 
 if [ -z ${DATABASE_URL+x} ]; then echo "Skipping database setup"; else setup_database; fi
