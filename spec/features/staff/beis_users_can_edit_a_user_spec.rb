@@ -123,4 +123,23 @@ RSpec.feature "BEIS users can editing other users" do
       expect(auditable_event.owner_id).to eq administrator_user.id
     end
   end
+
+  scenario "user deactivation is tracked with public_activity" do
+    administrator_user = create(:beis_user)
+    authenticate!(user: administrator_user)
+    target_user = create(:beis_user)
+
+    PublicActivity.with_tracking do
+      visit edit_user_path(target_user.id)
+      choose("Deactivate")
+      click_button("Submit")
+
+
+      user = User.find(target_user.id)
+      auditable_events = PublicActivity::Activity.where(trackable_id: user.id)
+      expect(auditable_events.map { |event| event.key }).to include("user.deactivate")
+      expect(auditable_events.map { |event| event.owner_id }.uniq).to eq [administrator_user.id]
+      expect(auditable_events.map { |event| event.trackable_id }.uniq).to eq [user.id]
+    end
+  end
 end
