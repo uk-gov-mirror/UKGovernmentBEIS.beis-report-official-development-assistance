@@ -170,6 +170,7 @@
 - Amend ingest service to successfully ingest Activities without an `activity-date` type
   2 (`actual_start_date`) 
 - XML download does not contain any incomplete activities   
+- Ingest AMS GCRF data from IATI
 
 [unreleased]: https://github.com/UKGovernmentBEIS/beis-report-official-development-assistance/compare/release-8...HEAD
 [release-8]: https://github.com/UKGovernmentBEIS/beis-report-official-development-assistance/compare/release-7...release-8
