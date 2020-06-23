@@ -2,11 +2,23 @@ language: minimal
 services:
 - docker
 before_install:
-- docker build . --target test --build-arg RAILS_ENV=test -t app/test
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+env:
+  - TAG="${TRAVIS_BUILD_NUMBER}-${TRAVIS_COMMIT}"
 jobs:
   include:
-  - stage: Test
-    name: Build and test the current version of the application using Docker
+  - stage: Build a test artefact
+    script: |
+      DOCKER_BUILDKIT=1 docker build . \
+      --target test \
+      --build-arg RAILS_ENV=test \
+      --tag app/test \
+      --cache-from app/test
+      --progress=plain
+  - stage: Run application tests using Docker
     env:
     - RAILS_ENV=test
     script: |
@@ -42,6 +54,13 @@ jobs:
       echo "==== linting our shell scripts ===="
       bash -c 'shopt -s globstar nullglob; shellcheck **/*.{sh,ksh,bash}'
       set +eu
+  - stage: Build production artefact
+    script:
+      DOCKER_BUILDKIT=1 docker build . \
+      --target web \
+      --tag "thedxw/beis-report-official-development-assistance:$TAG" \
+      --cache-from app/test
+      --progress=plain
 deploy:
 - provider: script
   script: bash travis-docker-push.sh
