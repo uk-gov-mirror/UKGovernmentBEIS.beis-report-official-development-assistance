@@ -1,15 +1,30 @@
 language: minimal
 services:
 - docker
+env:
+  global:
+    secure: mBNvcyOEhYVAbbUJL4sXvwU6RM9LgFLAaEq/B5VKhUSOSKWvcYYInk5qWOldMF79aE8mC7JsOi5D4AC6fvPEEU2aM9N5jcvoNyR5FEKg80ltgK8GE8NwrzqjD3shS2IhFtKdBN1PI/vDxAtIJqefQ8eSy2/FwdpN/aB06QDGjEy5ye2dh/A4YH5fAz1W9lncFI8zr7ZdPC5N7FG6DkNCVju9wfqwzyHCQabuJ3iKvq3dxBaRvJgrIi6I2QVHV9ieWARuI5CHgYQWwm2VPVW5vUhrZ3ZaefD5qJZ4Bp+NzlnDH7frCjuDpPrCiNI6wYrbOxj4LFVDAWl9dMYcZ9BY6DNQjeTtSt9qLCgG6csBsTf9RHR5THz3zreChEyf/+iJvBqyh9XdSNj/ZtEDFAM4z4LTsyQy7VlxyjLoO+oYOONzQP/y4EOmELJ7YPvB6bZmazJ2Rpix91svlBmaxtcx63W0aZa8yqqzJ5n6mPdIIBnMQOlNkofUSapaKJRceMcVqHk/5EqjUG7ETTf8eohrfLqrHP/S344NPNCDMHmTIoWd4QL7K9E0IeAinBUOa8RfN4A3SfXvouOPvfZGqCjmciAsQi2r024EqZ/c39xu1BQDLIm+LZ9ThMBimi2u7yZV7W4ijoY7DRae3mgzqGxnHxEmWhtDMWWnEujfR2BM4oY= # Coveralls.io READ_TOKEN
 before_install:
-- docker build . --target test --build-arg RAILS_ENV=test -t app/test
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
 jobs:
   include:
-  - stage: Test
-    name: Build and test the current version of the application using Docker
-    env:
-    - RAILS_ENV=test
+  - stage: Run application tests
     script: |
+      TAG="${TRAVIS_BUILD_NUMBER}-${TRAVIS_COMMIT}"
+      TEST_TAG="${TAG}-test"
+      
+      echo "==== create a docker image with test dependencies ===="
+      DOCKER_BUILDKIT=1 docker build . \
+        --target test \
+        --build-arg RAILS_ENV=test \
+        --cache-from "thedxw/beis-report-official-development-assistance:latest" \
+        --progress=plain \
+        -t "thedxw/beis-report-official-development-assistance:${TEST_TAG}"
+
+      echo "==== run application tests ===="
       set -eu
       docker network create test
       docker run -d --name pg --network test -p 5432:5432 postgres:11.6
@@ -28,7 +43,9 @@ jobs:
         -e COVERALLS_REPO_TOKEN="$COVERALLS_REPO_TOKEN" \
         -e CI=true \
         --env-file .env.test \
-        app/test /bin/bash -c "set -eu; bundle exec rake; bundle exec brakeman"
+        "thedxw/beis-report-official-development-assistance:${TEST_TAG}" \
+        /bin/bash -c "set -eu; bundle exec rake; bundle exec brakeman"
+
       echo "==== testing terrafrom ===="
       cd terraform
       git clone https://github.com/tfutils/tfenv.git ~/.tfenv
@@ -39,6 +56,7 @@ jobs:
       terraform fmt  -diff -check -recursive
       terraform validate
       cd ..
+
       echo "==== linting our shell scripts ===="
       bash -c 'shopt -s globstar nullglob; shellcheck **/*.{sh,ksh,bash}'
       set +eu
@@ -53,9 +71,6 @@ deploy:
   on:
     all_branches: true
     condition: "$TRAVIS_BRANCH =~ ^(develop|master)$"
-env:
-  global:
-    secure: mBNvcyOEhYVAbbUJL4sXvwU6RM9LgFLAaEq/B5VKhUSOSKWvcYYInk5qWOldMF79aE8mC7JsOi5D4AC6fvPEEU2aM9N5jcvoNyR5FEKg80ltgK8GE8NwrzqjD3shS2IhFtKdBN1PI/vDxAtIJqefQ8eSy2/FwdpN/aB06QDGjEy5ye2dh/A4YH5fAz1W9lncFI8zr7ZdPC5N7FG6DkNCVju9wfqwzyHCQabuJ3iKvq3dxBaRvJgrIi6I2QVHV9ieWARuI5CHgYQWwm2VPVW5vUhrZ3ZaefD5qJZ4Bp+NzlnDH7frCjuDpPrCiNI6wYrbOxj4LFVDAWl9dMYcZ9BY6DNQjeTtSt9qLCgG6csBsTf9RHR5THz3zreChEyf/+iJvBqyh9XdSNj/ZtEDFAM4z4LTsyQy7VlxyjLoO+oYOONzQP/y4EOmELJ7YPvB6bZmazJ2Rpix91svlBmaxtcx63W0aZa8yqqzJ5n6mPdIIBnMQOlNkofUSapaKJRceMcVqHk/5EqjUG7ETTf8eohrfLqrHP/S344NPNCDMHmTIoWd4QL7K9E0IeAinBUOa8RfN4A3SfXvouOPvfZGqCjmciAsQi2r024EqZ/c39xu1BQDLIm+LZ9ThMBimi2u7yZV7W4ijoY7DRae3mgzqGxnHxEmWhtDMWWnEujfR2BM4oY= # Coveralls.io READ_TOKEN
 notifications:
   slack:
     if: branch =~ /(develop|master)/
