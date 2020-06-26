@@ -10,10 +10,10 @@ class FindProjectActivities
 
   def call
     projects = policy_scope(Activity.project, policy_scope_class: ProjectPolicy::Scope)
-      .includes(:organisation)
+      .includes(:organisation, :parent)
       .order("created_at ASC")
     projects = if organisation.service_owner
-      projects.all
+      projects.all.includes(:parent)
     else
       projects.where(organisation_id: organisation.id)
     end

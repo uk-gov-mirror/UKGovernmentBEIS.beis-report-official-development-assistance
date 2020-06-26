@@ -3,6 +3,7 @@ RSpec.configure do |config|
     config.before(:each) do
       Bullet.add_whitelist type: :unused_eager_loading, class_name: "User", association: :organisation
       Bullet.add_whitelist type: :unused_eager_loading, class_name: "Activity", association: :organisation
+      Bullet.add_whitelist type: :unused_eager_loading, class_name: "Activity", association: :parent
       Bullet.start_request
     end
 
