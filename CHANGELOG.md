@@ -181,6 +181,7 @@
 
 - Users can see codes when selecting aid type
 - Increase the width of the application layout
+- Activity show content is show in tabs for financials and details
 
 [unreleased]: https://github.com/UKGovernmentBEIS/beis-report-official-development-assistance/compare/release-9...HEAD
 [release-9]: https://github.com/UKGovernmentBEIS/beis-report-official-development-assistance/compare/release-8...release-9
