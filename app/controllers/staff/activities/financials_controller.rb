@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Staff::ActivityFinancialsController < Staff::BaseController
+class Staff::Activities::FinancialsController < Staff::BaseController
   include Secured
 
   def show
@@ -15,6 +15,5 @@ class Staff::ActivityFinancialsController < Staff::BaseController
     @budget_presenters = @budgets.includes(:parent_activity).map { |budget| BudgetPresenter.new(budget) }
     @planned_disbursement_presenters = @planned_disbursements.map { |planned_disbursement| PlannedDisbursementPresenter.new(planned_disbursement) }
     @implementing_organisation_presenters = @activity.implementing_organisations.map { |implementing_organisation| ImplementingOrganisationPresenter.new(implementing_organisation) }
-    render "staff/activities/financials"
   end
 end

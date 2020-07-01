@@ -14,8 +14,8 @@ Rails.application.routes.draw do
     resources :users
     resources :organisations, except: [:destroy] do
       resources :activities, except: [:destroy] do
-        get "financials" => "activity_financials#show"
-        get "details" => "activity_details#show"
+        resource :financials, only: [:show], controller: "activities/financials"
+        resource :details, only: [:show], controller: "activities/details"
       end
       resources :funds, only: [:create] do
         resources :programmes, only: [:create] do
