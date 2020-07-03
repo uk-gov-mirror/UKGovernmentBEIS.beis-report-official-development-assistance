@@ -4,6 +4,8 @@ class Staff::ActivityFormsController < Staff::BaseController
   include ActivityHelper
 
   FORM_STEPS = [
+    :level,
+    :parent,
     :blank,
     :identifier,
     :purpose,
@@ -26,6 +28,8 @@ class Staff::ActivityFormsController < Staff::BaseController
     authorize @activity
 
     case step
+    when :parent
+      skip_step if @activity.fund?
     when :blank
       skip_step
     when :region
@@ -40,6 +44,7 @@ class Staff::ActivityFormsController < Staff::BaseController
   def update
     @page_title = t("page_title.activity_form.show.#{step}")
     @activity = Activity.find(params[:activity_id])
+    @activity.parent = Activity.find(params["activity"]["parent"]) if params["activity"]["parent"].present?
     authorize @activity
 
     update_activity_dates
@@ -92,7 +97,7 @@ class Staff::ActivityFormsController < Staff::BaseController
     params.require(:activity).permit(:identifier, :sector_category, :sector, :title, :description, :status,
       :planned_start_date, :planned_end_date, :actual_start_date, :actual_end_date,
       :geography, :recipient_region, :recipient_country, :flow,
-      :aid_type)
+      :aid_type, :level)
   end
 
   def finish_wizard_path

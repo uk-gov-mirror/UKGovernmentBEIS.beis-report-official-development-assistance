@@ -1,0 +1,9 @@
+= render layout: "wrapper" do |f|
+  - parent_activities = list_of_parent_activities(activity: f.object)
+  = f.hidden_field :parent
+  = f.govuk_collection_radio_buttons :parent,
+    parent_activities,
+    :id,
+    ->(activity){ activity.title || "Untitled (#{activity.id})" },
+    legend: { tag: 'h1', size: 'xl', text: I18n.t("form.legend.activity.parent", parent_level: f.object.parent_level, level: f.object.level) },
+    hint_text: I18n.t("form.hint.activity.parent", parent_level: f.object.parent_level, level: f.object.level).html_safe

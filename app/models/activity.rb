@@ -116,4 +116,17 @@ class Activity < ApplicationRecord
     return organisation if third_party_project? && !organisation.is_government?
     Organisation.find_by(service_owner: true)
   end
+
+  def parent_level
+    case level
+    when "fund"
+      nil
+    when "programme"
+      "fund"
+    when "project"
+      "programme"
+    when "third_party_project"
+      "project"
+    end
+  end
 end

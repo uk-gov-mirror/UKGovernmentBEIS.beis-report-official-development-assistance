@@ -44,4 +44,22 @@ module FormHelper
       OpenStruct.new(id: "false", name: t("form.user.active.inactive")),
     ]
   end
+
+  def list_of_parent_activities(activity:)
+    case activity.level.to_sym
+    when :fund
+      Activity.none
+    when :programme
+      FindFundActivities.new(organisation: activity.organisation, current_user: current_user).call
+    when :project
+      FindProgrammeActivities.new(organisation: activity.organisation, current_user: current_user).call
+    when :third_party_project
+      FindThirdPartyProjectActivities.new(organisation: activity.organisation, current_user: current_user).call
+    end
+  end
+
+  def authorised_activity_levels
+    authorised_levels = Activity.levels.select { |level| policy(level.to_sym).update? }
+    authorised_levels.keys.map { |level| OpenStruct.new(level: level, description: level.titleize) }
+  end
 end
