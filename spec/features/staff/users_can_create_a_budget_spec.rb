@@ -126,24 +126,51 @@ RSpec.describe "Users can create a budget" do
     end
 
     context "on a project level activity" do
-      scenario "successfully creates a budget" do
-        fund_activity = create(:fund_activity)
-        programme_activity = create(:programme_activity,
-          parent: fund_activity,
-          extending_organisation: user.organisation)
-        project_activity = create(:project_activity,
-          parent: programme_activity,
-          organisation: user.organisation)
+      context "if the status of the project is not 'Completed'" do
+        scenario "successfully creates a budget" do
+          fund_activity = create(:fund_activity)
+          programme_activity = create(:programme_activity,
+            parent: fund_activity,
+            extending_organisation: user.organisation)
+          project_activity = create(:project_activity,
+            parent: programme_activity,
+            organisation: user.organisation)
 
-        visit activities_path
+          visit activities_path
 
-        click_on(project_activity.title)
+          click_on(project_activity.title)
 
-        click_on(I18n.t("page_content.budgets.button.create"))
+          click_on(I18n.t("page_content.budgets.button.create"))
 
-        fill_in_and_submit_budget_form
+          fill_in_and_submit_budget_form
 
-        expect(page).to have_content(I18n.t("action.budget.create.success"))
+          expect(page).to have_content(I18n.t("action.budget.create.success"))
+        end
+      end
+
+      context "when the status of the project is 'Completed'" do
+        scenario "users will not be allowed to create budgets" do
+          project = create(:project_activity, organisation: user.organisation, programme_status: "01")
+          visit activities_path
+          click_on project.title
+
+          expect(page).not_to have_content I18n.t("page_content.planned_disbursements.button.create")
+        end
+
+        scenario "users will get an authorisation error message" do
+          project = create(:project_activity, organisation: user.organisation, programme_status: "02")
+
+          visit activities_path
+
+          click_on(project.title)
+
+          click_on(I18n.t("page_content.transactions.button.create"))
+          project.programme_status = "01"
+          project.save!
+          click_on(I18n.t("default.button.submit"))
+
+          expect(page).to have_content(I18n.t("page_title.errors.not_authorised"))
+        end
       end
     end
   end

@@ -12,7 +12,7 @@ class Staff::PlannedDisbursementsController < Staff::BaseController
 
   def create
     @activity = Activity.find(params["activity_id"])
-    authorize @activity
+    authorize @activity, :add_planned_disbursement?
 
     result = CreatePlannedDisbursement.new(activity: @activity).call(attributes: planned_disbursement_params)
     @planned_disbursement = result.object

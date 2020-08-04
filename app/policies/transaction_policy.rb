@@ -1,6 +1,6 @@
 class TransactionPolicy < ApplicationPolicy
   def create?
-    Pundit.policy!(user, record.parent_activity).create?
+    Pundit.policy!(user, record.parent_activity).add_transaction?
   end
 
   def update?

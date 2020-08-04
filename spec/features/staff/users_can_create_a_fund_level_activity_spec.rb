@@ -19,6 +19,16 @@ RSpec.feature "Users can create a fund level activity" do
       expect(page).to have_content I18n.t("action.fund.create.success")
     end
 
+    scenario "the user is not asked for a programme status when filling in the form" do
+      identifier = "a-fund-has-not-a-programme-status"
+      visit activities_path
+      click_on(I18n.t("page_content.organisation.button.create_activity"))
+
+      fill_in_activity_form(identifier: identifier, level: "fund")
+      activity = Activity.find_by(identifier: identifier)
+      expect(activity.programme_status).to be_nil
+    end
+
     scenario "the activity form has some defaults" do
       activity = create(:fund_activity, organisation: user.organisation)
       activity_presenter = ActivityPresenter.new(activity)
@@ -174,14 +184,22 @@ RSpec.feature "Users can create a fund level activity" do
 
         choose "Primary education"
         click_button I18n.t("form.button.activity.submit")
-        expect(page).to have_content I18n.t("form.legend.activity.status", level: "programme")
+        expect(page).to have_content I18n.t("form.legend.activity.programme_status", level: "programme")
 
-        # Don't provide a status
+        # Don't provide an activity status
         click_button I18n.t("form.button.activity.submit")
-        expect(page).to have_content "Status can't be blank"
+        expect(page).to have_content "can't be blank"
 
-        choose("activity[status]", option: "2")
+        choose("activity[programme_status]", option: "07")
         click_button I18n.t("form.button.activity.submit")
+        # expect(page).to have_content I18n.t("form.legend.activity.status", level: "programme")
+
+        # # Don't provide a status
+        # click_button I18n.t("form.button.activity.submit")
+        # expect(page).to have_content "Status can't be blank"
+
+        # choose("activity[status]", option: "2")
+        # click_button I18n.t("form.button.activity.submit")
 
         expect(page).to have_content I18n.t("page_title.activity_form.show.dates", level: "programme")
 

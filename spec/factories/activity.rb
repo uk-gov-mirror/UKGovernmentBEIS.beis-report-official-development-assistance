@@ -5,7 +5,8 @@ FactoryBot.define do
     description { Faker::Lorem.paragraph }
     sector_category { "111" }
     sector { "11110" }
-    status { "2" }
+    programme_status { "07" }
+    # status { "2" }
     planned_start_date { Date.today }
     planned_end_date { Date.tomorrow }
     actual_start_date { Date.yesterday }
@@ -98,7 +99,8 @@ FactoryBot.define do
     description { nil }
     sector_category { nil }
     sector { nil }
-    status { nil }
+    programme_status { nil }
+    # status { nil }
     planned_start_date { nil }
     planned_end_date { nil }
     actual_start_date { nil }
@@ -115,7 +117,8 @@ FactoryBot.define do
     title { nil }
     description { nil }
     sector { nil }
-    status { nil }
+    programme_status { nil }
+    # status { nil }
     planned_start_date { nil }
     planned_end_date { nil }
     actual_start_date { nil }
@@ -151,7 +154,8 @@ FactoryBot.define do
     title { nil }
     description { nil }
     sector { nil }
-    status { nil }
+    programme_status { nil }
+    # status { nil }
     planned_start_date { nil }
     planned_end_date { nil }
     actual_start_date { nil }
@@ -173,7 +177,8 @@ FactoryBot.define do
     title { nil }
     description { nil }
     sector { nil }
-    status { nil }
+    programme_status { nil }
+    # status { nil }
     planned_start_date { nil }
     planned_end_date { nil }
     actual_start_date { nil }
@@ -194,7 +199,8 @@ FactoryBot.define do
     title { nil }
     description { nil }
     sector { nil }
-    status { nil }
+    programme_status { nil }
+    # status { nil }
     planned_start_date { nil }
     planned_end_date { nil }
     actual_start_date { nil }

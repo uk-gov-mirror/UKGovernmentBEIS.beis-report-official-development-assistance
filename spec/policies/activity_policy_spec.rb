@@ -65,6 +65,66 @@ RSpec.describe ActivityPolicy do
     end
   end
 
+  describe "#add_transaction?" do
+    context "when the user belongs to the authoring organisation" do
+      context "and the activity status is 'Spend in progress'" do
+        let(:activity) { create(:activity, organisation: user.organisation, programme_status: "02") }
+        it { is_expected.to permit_action(:add_transaction) }
+      end
+
+      context "and the activity status is not 'Spend in progress'" do
+        let(:activity) { create(:activity, organisation: user.organisation, programme_status: "01") }
+        it { is_expected.to forbid_action(:add_transaction) }
+      end
+    end
+
+    context "when the user does NOT belong to the authoring organisation" do
+      let(:another_organisation) { create(:organisation) }
+      let(:activity) { create(:activity, organisation: another_organisation) }
+      it { is_expected.to forbid_action(:add_transaction) }
+    end
+  end
+
+  describe "#add_planned_disbursement?" do
+    context "when the user belongs to the authoring organisation" do
+      context "and the activity status is not 'Completed'" do
+        let(:activity) { create(:activity, organisation: user.organisation, programme_status: "02") }
+        it { is_expected.to permit_action(:add_planned_disbursement) }
+      end
+
+      context "and the activity status is 'Completed'" do
+        let(:activity) { create(:activity, organisation: user.organisation, programme_status: "01") }
+        it { is_expected.to forbid_action(:add_planned_disbursement) }
+      end
+    end
+
+    context "when the user does NOT belong to the authoring organisation" do
+      let(:another_organisation) { create(:organisation) }
+      let(:activity) { create(:activity, organisation: another_organisation) }
+      it { is_expected.to forbid_action(:add_planned_disbursement) }
+    end
+  end
+
+  describe "#add_budget?" do
+    context "when the user belongs to the authoring organisation" do
+      context "and the activity status is not 'Completed'" do
+        let(:activity) { create(:activity, organisation: user.organisation, programme_status: "02") }
+        it { is_expected.to permit_action(:add_budget) }
+      end
+
+      context "and the activity status is 'Completed'" do
+        let(:activity) { create(:activity, organisation: user.organisation, programme_status: "01") }
+        it { is_expected.to forbid_action(:add_budget) }
+      end
+    end
+
+    context "when the user does NOT belong to the authoring organisation" do
+      let(:another_organisation) { create(:organisation) }
+      let(:activity) { create(:activity, organisation: another_organisation) }
+      it { is_expected.to forbid_action(:add_budget) }
+    end
+  end
+
   describe "#create?" do
     context "when the user belongs to the authoring organisation" do
       let(:activity) { create(:activity, organisation: user.organisation) }

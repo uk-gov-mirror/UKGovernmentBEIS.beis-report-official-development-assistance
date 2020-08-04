@@ -10,6 +10,18 @@ class ActivityPolicy < ApplicationPolicy
       record.third_party_project?
   end
 
+  def add_transaction?
+    record.organisation == user.organisation && record.programme_status == "01"
+  end
+
+  def add_planned_disbursement?
+    record.organisation == user.organisation && record.programme_status != "01"
+  end
+
+  def add_budget?
+    record.organisation == user.organisation && record.programme_status != "01"
+  end
+
   def create?
     record.organisation == user.organisation
   end

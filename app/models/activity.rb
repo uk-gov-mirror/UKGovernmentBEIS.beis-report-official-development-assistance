@@ -12,7 +12,8 @@ class Activity < ApplicationRecord
     :purpose_step,
     :sector_category_step,
     :sector_step,
-    :status_step,
+    :programme_status_step,
+    # :status_step,
     :geography_step,
     :region_step,
     :country_step,
@@ -28,7 +29,8 @@ class Activity < ApplicationRecord
   validates :title, :description, presence: true, on: :purpose_step
   validates :sector_category, presence: true, on: :sector_category_step
   validates :sector, presence: true, on: :sector_step
-  validates :status, presence: true, on: :status_step
+  validates :programme_status, presence: true, on: :programme_status_step
+  # validates :status, presence: true, on: :status_step
   validates :geography, presence: true, on: :geography_step
   validates :recipient_region, presence: true, on: :region_step, if: :recipient_region?
   validates :recipient_country, presence: true, on: :country_step, if: :recipient_country?
@@ -91,6 +93,10 @@ class Activity < ApplicationRecord
   def default_currency
     organisation.default_currency
   end
+
+  # def status
+  #   programme_status_to_iati_status_mapping.find { |pair| pair["programme-status"] == programme_status }["iati-status"]
+  # end
 
   def has_funding_organisation?
     funding_organisation_reference.present? &&

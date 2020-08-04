@@ -158,12 +158,12 @@ RSpec.describe Activity, type: :model do
       end
     end
 
-    context "when status is blank" do
-      subject(:activity) { build(:activity, status: nil) }
-      it "should not be valid" do
-        expect(activity.valid?(:status_step)).to be_falsey
-      end
-    end
+    # context "when status is blank" do
+    #   subject(:activity) { build(:activity, status: nil) }
+    #   it "should not be valid" do
+    #     expect(activity.valid?(:status_step)).to be_falsey
+    #   end
+    # end
 
     context "when planned_start_date is blank but actual_start_date is not nil" do
       subject(:activity) { build(:activity, planned_start_date: nil) }

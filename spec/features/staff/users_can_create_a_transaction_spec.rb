@@ -267,6 +267,33 @@ RSpec.feature "Users can create a transaction" do
       expect(page).not_to have_content(I18n.t("page_content.transactions.button.create"))
     end
 
+    context "when the activity status is not 'Spend in progress'" do
+      scenario "users will not be allowed to add a new transaction" do
+        activity = create(:project_activity, organisation: user.organisation, programme_status: "01")
+
+        visit activities_path
+
+        click_on(activity.title)
+
+        expect(page).not_to have_content(I18n.t("page_content.transactions.button.create"))
+      end
+
+      scenario "users will get an authorisation error message" do
+        activity = create(:project_activity, organisation: user.organisation, programme_status: "02")
+
+        visit activities_path
+
+        click_on(activity.title)
+
+        click_on(I18n.t("page_content.transactions.button.create"))
+        activity.programme_status = "01"
+        activity.save!
+        click_on(I18n.t("default.button.submit"))
+
+        expect(page).to have_content(I18n.t("page_title.errors.not_authorised"))
+      end
+    end
+
     context "and the activity is a third-party project" do
       scenario "the providing organisation details are pre-filled with BEIS information" do
         beis = create(:beis_organisation)

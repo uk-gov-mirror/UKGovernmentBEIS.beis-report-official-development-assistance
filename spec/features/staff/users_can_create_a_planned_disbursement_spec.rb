@@ -3,6 +3,30 @@ RSpec.describe "Users can create a planned disbursement" do
     let(:user) { create(:delivery_partner_user) }
 
     before { authenticate!(user: user) }
+    context "and the activity status is 'Completed'" do
+      scenario "they cannot add new planned disbursements" do
+        project = create(:project_activity, organisation: user.organisation, programme_status: "01")
+        visit activities_path
+        click_on project.title
+
+        expect(page).not_to have_content I18n.t("page_content.planned_disbursements.button.create")
+      end
+
+      scenario "users will get an authorisation error message" do
+        project = create(:project_activity, organisation: user.organisation, programme_status: "02")
+
+        visit activities_path
+
+        click_on(project.title)
+
+        click_on(I18n.t("page_content.transactions.button.create"))
+        project.programme_status = "01"
+        project.save!
+        click_on(I18n.t("default.button.submit"))
+
+        expect(page).to have_content(I18n.t("page_title.errors.not_authorised"))
+      end
+    end
 
     scenario "they can add a planned disbursement" do
       project = create(:project_activity, organisation: user.organisation)
