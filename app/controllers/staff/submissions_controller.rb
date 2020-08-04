@@ -7,6 +7,8 @@ class Staff::SubmissionsController < Staff::BaseController
     @submission = Submission.find(id)
     authorize @submission
 
+    # get all the activities for the submission dp and fund
+    @all_activities = Activity.activities_for_organisation_and_fund(@submission.organisation, @submission.fund)
     respond_to do |format|
       format.html
       format.csv do

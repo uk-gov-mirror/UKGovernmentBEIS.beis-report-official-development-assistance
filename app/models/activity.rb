@@ -71,6 +71,14 @@ class Activity < ApplicationRecord
   scope :programmes, -> { where(level: :programme) }
   scope :publishable_to_iati, -> { where(form_state: :complete, publish_to_iati: true) }
 
+  def self.activities_for_organisation_and_fund(organisation, fund)
+    all_activities = where(organisation: organisation).where(level: :project)
+
+    all_activities.filter do |activity|
+      activity.parent_activities.first.id == fund.id
+    end
+  end
+
   def valid?(context = nil)
     context = VALIDATION_STEPS if context.nil? && form_steps_completed?
     super(context)
@@ -116,6 +124,10 @@ class Activity < ApplicationRecord
     ancestors.reverse
   end
 
+  def fund_id
+    parent_activities.first.id
+  end
+
   def providing_organisation
     return organisation if third_party_project? && !organisation.is_government?
     Organisation.find_by(service_owner: true)
@@ -132,5 +144,13 @@ class Activity < ApplicationRecord
     parent_activities.each_with_object([reporting_organisation.iati_reference]) { |parent, parent_identifiers|
       parent_identifiers << parent.identifier
     }.push(identifier).join("-")
+  end
+
+  def transaction_total
+    transactions.sum(:value).to_s
+  end
+
+  def transaction_total_for_range(start_date, end_date)
+    transactions.where("date > ?", start_date).where("date < ?", end_date).sum(:value)
   end
 end
