@@ -77,6 +77,10 @@ class ActivityPresenter < SimpleDelegator
     I18n.t("page_content.activity.level.#{super}").capitalize
   end
 
+  def level_letter
+    I18n.t("page_content.activity.level_letter.#{to_model.level}")
+  end
+
   def link_to_roda
     Rails.application.routes.url_helpers.organisation_activity_details_url(organisation, self, host: ENV["DOMAIN"]).to_s
   end

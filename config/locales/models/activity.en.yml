@@ -149,6 +149,11 @@ en:
         programme: programme
         project: project
         third_party_project: third-party project
+      level_letter:
+        fund: Level A
+        programme: Level B
+        project: Level C
+        third_party_project: Level D
       planned_disbursements: Planned disbursements
       projects: Projects
       recipient_country:

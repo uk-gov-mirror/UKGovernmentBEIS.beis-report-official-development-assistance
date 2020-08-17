@@ -264,6 +264,36 @@ RSpec.describe ActivityPresenter do
     end
   end
 
+  describe "#level_letter" do
+    context "when the activity is a fund" do
+      it "returns Level A" do
+        fund = create(:fund_activity)
+        expect(described_class.new(fund).level_letter).to eql("Level A")
+      end
+    end
+
+    context "when the activity is a programme" do
+      it "returns Level B" do
+        programme = create(:programme_activity)
+        expect(described_class.new(programme).level_letter).to eql("Level B")
+      end
+    end
+
+    context "when the activity is a project" do
+      it "returns Level C" do
+        project = create(:project_activity)
+        expect(described_class.new(project).level_letter).to eql("Level C")
+      end
+    end
+
+    context "when the activity is a third_party_project" do
+      it "returns Level D" do
+        third_party_project = create(:third_party_project_activity)
+        expect(described_class.new(third_party_project).level_letter).to eql("Level D")
+      end
+    end
+  end
+
   describe "#link_to_roda" do
     it "returns the full URL to the activity in RODA" do
       project = create(:project_activity)
