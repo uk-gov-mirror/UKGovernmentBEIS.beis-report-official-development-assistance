@@ -189,6 +189,26 @@ RSpec.describe ActivityPresenter do
     end
   end
 
+  describe "#finance" do
+    context "when finance type exists" do
+      it "returns the locale value for the code" do
+        activity = build(:activity)
+        result = described_class.new(activity).finance
+        expect(result).to eql("Standard grant")
+      end
+    end
+  end
+
+  describe "#tied_status" do
+    context "when tied status exists" do
+      it "returns the locale value for the code" do
+        activity = build(:activity)
+        result = described_class.new(activity).tied_status
+        expect(result).to eql("Untied")
+      end
+    end
+  end
+
   describe "#call_to_action" do
     it "returns 'edit' if the desired attribute is present" do
       activity = build(:activity, title: "My title")

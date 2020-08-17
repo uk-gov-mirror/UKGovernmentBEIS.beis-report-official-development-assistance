@@ -58,6 +58,16 @@ class ActivityPresenter < SimpleDelegator
     I18n.t("activity.flow.#{super}")
   end
 
+  def finance
+    return if super.blank?
+    I18n.t("activity.finance.#{super}")
+  end
+
+  def tied_status
+    return if super.blank?
+    I18n.t("activity.tied_status.#{super}")
+  end
+
   def call_to_action(attribute)
     send(attribute).present? ? "edit" : "add"
   end

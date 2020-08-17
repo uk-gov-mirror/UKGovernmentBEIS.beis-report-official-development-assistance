@@ -665,6 +665,10 @@ en:
       '4': Post-completion
       '5': Cancelled
       '6': Suspended
+    tied_status:
+      '5': Untied
+    finance:
+      '110': Standard grant
   generic:
     default_currency:
       aed: UAE Dirham
