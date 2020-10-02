@@ -64,6 +64,8 @@ class Activity < ApplicationRecord
   validates :call_open_date, presence: true, on: :call_dates_step, if: :call_present?
   validates :call_close_date, presence: true, on: :call_dates_step, if: :call_present?
 
+  validate :invalid_date, on: :dates_step
+
   acts_as_tree
   belongs_to :parent, optional: true, class_name: :Activity, foreign_key: "parent_id"
 
@@ -108,6 +110,10 @@ class Activity < ApplicationRecord
 
   def self.by_roda_identifier(identifier)
     find_by(roda_identifier_compound: identifier)
+  end
+
+  def invalid_date
+    errors.empty?
   end
 
   def valid?(context = nil)

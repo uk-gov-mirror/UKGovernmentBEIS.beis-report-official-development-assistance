@@ -6,6 +6,7 @@ class UpdateTransaction
   end
 
   def call(attributes: {})
+    binding.pry
     transaction.assign_attributes(attributes)
 
     convert_and_assign_value(transaction, attributes[:value])

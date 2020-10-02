@@ -7,24 +7,33 @@ RSpec.describe DateHelper, type: :helper do
       expect(helper.format_date(params)).to eq(Date.new(2020, 2, 1))
     end
 
-    it "returns nil when passed nil" do
-      params = {}
-      expect(helper.format_date(params)).to eq(nil)
+    context "when passed an attribute to raise an error against" do
+      it "returns nil when the date params are incomplete" do
+        params = {day: "", month: "", year: "2019"}
+        expect(helper.format_date(params)).to eq(nil)
+      end
     end
 
-    it "returns nil when the date params are incomplete" do
-      params = {day: "", month: "", year: "2019"}
-      expect(helper.format_date(params)).to eq(nil)
-    end
+    context "when not passed an attribute" do
+      it "returns nil when passed nil" do
+        params = {}
+        expect(helper.format_date(params)).to eq(nil)
+      end
 
-    it "returns nil when given an invalid date" do
-      params = {day: "40", month: "13", year: "2020"}
-      expect(helper.format_date(params)).to eq(nil)
-    end
+      it "returns nil when the date params are incomplete" do
+        params = {day: "", month: "", year: "2019"}
+        expect(helper.format_date(params)).to eq(nil)
+      end
 
-    it "returns nil when given a zero parameter" do
-      params = {day: "40", month: "0", year: "2020"}
-      expect(helper.format_date(params)).to eq(nil)
+      it "returns nil when given an invalid date" do
+        params = {day: "40", month: "13", year: "2020"}
+        expect(helper.format_date(params)).to eq(nil)
+      end
+
+      it "returns nil when given a zero parameter" do
+        params = {day: "40", month: "0", year: "2020"}
+        expect(helper.format_date(params)).to eq(nil)
+      end
     end
   end
 end

@@ -79,6 +79,8 @@ class Staff::ActivityFormsController < Staff::BaseController
       @activity.assign_attributes(programme_status: DEFAULT_PROGRAMME_STATUS_FOR_FUNDS, status: iati_status)
     end
 
+    errors = {}
+
     case step
     when :level
       @activity.assign_attributes(level: level)
@@ -113,12 +115,26 @@ class Staff::ActivityFormsController < Staff::BaseController
       iati_status = ProgrammeToIatiStatus.new.programme_status_to_iati_status(programme_status)
       @activity.assign_attributes(programme_status: programme_status, status: iati_status)
     when :dates
-      @activity.assign_attributes(
-        planned_start_date: format_date(planned_start_date),
-        planned_end_date: format_date(planned_end_date),
-        actual_start_date: format_date(actual_start_date),
-        actual_end_date: format_date(actual_end_date),
-      )
+      begin
+        @activity.assign_attributes(planned_start_date)
+      rescue ActiveRecord::MultiparameterAssignmentErrors => e
+        errors[:planned_start_date] = t("activerecord.errors.models.activity.attributes.planned_start_date.invalid")
+      end
+      begin
+        @activity.assign_attributes(planned_end_date)
+      rescue ActiveRecord::MultiparameterAssignmentErrors => e
+        errors[:planned_end_date] = t("activerecord.errors.models.activity.attributes.planned_end_date.invalid")
+      end
+      begin
+        @activity.assign_attributes(actual_start_date)
+      rescue ActiveRecord::MultiparameterAssignmentErrors => e
+        errors[:actual_start_date] = t("activerecord.errors.models.activity.attributes.actual_start_date.invalid")
+      end
+      begin
+        @activity.assign_attributes(actual_end_date)
+      rescue ActiveRecord::MultiparameterAssignmentErrors => e
+        errors[:actual_end_date] = t("activerecord.errors.models.activity.attributes.actual_end_date.invalid")
+      end
     when :geography
       @activity.assign_attributes(geography: geography, recipient_region: nil, recipient_country: nil)
     when :region
@@ -146,8 +162,16 @@ class Staff::ActivityFormsController < Staff::BaseController
       @activity.assign_attributes(oda_eligibility: oda_eligibility)
     end
 
+    unless errors.empty?
+      errors.each do |key,value|
+        @activity.errors.add(key, value)
+      end
+    end
+
     update_form_state
     record_auditable_activity
+
+    binding.pry if step == :dates
 
     # `render_wizard` calls save on the object passed to it.
     render_wizard @activity, context: :"#{step}_step"
@@ -218,23 +242,19 @@ class Staff::ActivityFormsController < Staff::BaseController
   end
 
   def planned_start_date
-    planned_start_date = params.require(:activity).permit(:planned_start_date)
-    {day: planned_start_date["planned_start_date(3i)"], month: planned_start_date["planned_start_date(2i)"], year: planned_start_date["planned_start_date(1i)"]}
+    params.require(:activity).permit(:planned_start_date)
   end
 
   def planned_end_date
-    planned_end_date = params.require(:activity).permit(:planned_end_date)
-    {day: planned_end_date["planned_end_date(3i)"], month: planned_end_date["planned_end_date(2i)"], year: planned_end_date["planned_end_date(1i)"]}
+    params.require(:activity).permit(:planned_end_date)
   end
 
   def actual_start_date
-    actual_start_date = params.require(:activity).permit(:actual_start_date)
-    {day: actual_start_date["actual_start_date(3i)"], month: actual_start_date["actual_start_date(2i)"], year: actual_start_date["actual_start_date(1i)"]}
+    params.require(:activity).permit(:actual_start_date)
   end
 
   def actual_end_date
-    actual_end_date = params.require(:activity).permit(:actual_end_date)
-    {day: actual_end_date["actual_end_date(3i)"], month: actual_end_date["actual_end_date(2i)"], year: actual_end_date["actual_end_date(1i)"]}
+    params.require(:activity).permit(:actual_end_date)
   end
 
   def geography
@@ -284,7 +304,8 @@ class Staff::ActivityFormsController < Staff::BaseController
   end
 
   def update_form_state
-    return if @activity.invalid?
+    binding.pry
+    return unless @activity.errors.empty?
 
     if @activity.form_steps_completed?
       flash[:notice] ||= t("action.#{@activity.level}.update.success")
@@ -295,6 +316,7 @@ class Staff::ActivityFormsController < Staff::BaseController
   end
 
   def record_auditable_activity
+    return unless @activity.errors.empty?
     action = @activity.form_steps_completed? ? "update" : "create"
     @activity.create_activity key: "activity.#{action}.#{step}", owner: current_user
   end

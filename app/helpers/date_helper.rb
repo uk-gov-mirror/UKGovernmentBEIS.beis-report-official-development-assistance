@@ -1,5 +1,5 @@
 module DateHelper
-  def format_date(params)
+  def format_date(params, attribute = nil)
     date_parts = params.values_at(:day, :month, :year)
     return unless date_parts.all?(&:present?)
 
