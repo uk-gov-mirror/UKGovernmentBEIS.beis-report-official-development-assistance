@@ -68,9 +68,22 @@ RSpec.describe Report, type: :model do
     expect(report.errors[:fund]).to include t("activerecord.errors.models.report.attributes.fund.level")
   end
 
-  it "does not allow a Deadline which is in the past" do
-    report = build(:report, deadline: Date.yesterday)
-    expect(report).not_to be_valid
+  describe "#deadline" do
+    context "while adding the Deadline" do
+      it "does not allow a Deadline which is in the past" do
+        report = build(:report, deadline: Date.yesterday)
+        expect(report.valid?(:on_deadline_update)).to be false
+      end
+    end
+
+    context "when validating the report in any other context" do
+      it "allows a Deadline which is in the past" do
+        travel_to("2020-10-01") do
+          report = create(:report, deadline: "2020-09-01")
+          expect(report.valid?(:custom_context)).to be true
+        end
+      end
+    end
   end
 
   describe "#financial_quarter" do
