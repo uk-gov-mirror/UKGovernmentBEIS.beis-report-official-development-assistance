@@ -53,7 +53,6 @@ class Staff::PlannedDisbursementsController < Staff::BaseController
 
   private def planned_disbursement_params
     params.require(:planned_disbursement).permit(
-      :planned_disbursement_type,
       :period_start_date,
       :period_end_date,
       :currency,
