@@ -55,9 +55,6 @@ class Staff::PlannedDisbursementsController < Staff::BaseController
       :period_start_date,
       :period_end_date,
       :value,
-      :receiving_organisation_name,
-      :receiving_organisation_type,
-      :receiving_organisation_reference,
       :financial_quarter,
       :financial_year,
     )

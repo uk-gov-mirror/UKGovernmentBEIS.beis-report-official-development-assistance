@@ -9,20 +9,18 @@ en:
   form:
     label:
       planned_disbursement:
-        receiving_organisation_name: Receiving organisation name
-        receiving_organisation_type: Receiving organisation type
-        receiving_organisation_reference: IATI Reference (optional)
         value: Forecasted spend amount
     legend:
       planned_disbursement:
-        receiving_organisation: Receiving organisation
     hint:
       planned_disbursement:
         receiving_organisation: Receiving organisation
     hint:
       planned_disbursement:
-        receiving_organisation: The organisation receiving the money from this transaction.
-        receiving_organisation_reference_html: For example, GB-COH-12345. To lookup codes or for more infomation see <a href="http://org-id.guide/" target="_blank" class="govuk-link">the organisation finder service (Opens in new window)</a>
+        period_end_date: End date
+        period_start_date: Start date
+    hint:
+      planned_disbursement:
   table:
     header:
       planned_disbursement:
