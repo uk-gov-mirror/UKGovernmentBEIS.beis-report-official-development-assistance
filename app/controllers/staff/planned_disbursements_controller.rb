@@ -55,7 +55,6 @@ class Staff::PlannedDisbursementsController < Staff::BaseController
     params.require(:planned_disbursement).permit(
       :period_start_date,
       :period_end_date,
-      :currency,
       :value,
       :providing_organisation_name,
       :providing_organisation_type,
