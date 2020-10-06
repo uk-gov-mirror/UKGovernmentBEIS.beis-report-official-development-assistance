@@ -38,6 +38,18 @@ module FormHelper
     end
   end
 
+  def list_of_financial_quarters
+    @list_of_financial_quarters ||= begin
+      FinancialPeriods::FINANCIAL_QUARTERS.map { |id| OpenStruct.new(id: id, name: "Q#{id}") }
+    end
+  end
+
+  def list_of_financial_years
+    @list_of_financial_years ||= begin
+      FinancialPeriods.next_ten_financial_years.map { |year| OpenStruct.new(id: year.to_s, name: "#{year}-#{year + 1}") }
+    end
+  end
+
   def user_active_options
     [
       OpenStruct.new(id: "true", name: t("form.user.active.active")),
