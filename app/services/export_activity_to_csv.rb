@@ -85,7 +85,7 @@ class ExportActivityToCsv
 
   def next_four_quarter_forecasts
     quarter_date_ranges = report_presenter.quarters_to_date_ranges
-    quarter_date_ranges.map { |range| activity_presenter.forecasted_total_for_date_range(range: range) }
+    quarter_date_ranges.map { |range| activity_presenter.forecasted_total_for_date_range(report: report) }
   end
 
   private def activity_presenter

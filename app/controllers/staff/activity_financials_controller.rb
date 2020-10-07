@@ -9,7 +9,7 @@ class Staff::ActivityFinancialsController < Staff::BaseController
 
     @transactions = policy_scope(Transaction).where(parent_activity: @activity).order("date DESC")
     @budgets = policy_scope(Budget).where(parent_activity: @activity).order("period_start_date DESC")
-    @planned_disbursements = policy_scope(PlannedDisbursement).where(parent_activity: @activity).order("period_start_date DESC")
+    @planned_disbursements = policy_scope(PlannedDisbursement).latest_for_activity(@activity)
 
     @transaction_presenters = @transactions.includes(:parent_activity).map { |transaction| TransactionPresenter.new(transaction) }
     @budget_presenters = @budgets.includes(:parent_activity).map { |budget| BudgetPresenter.new(budget) }

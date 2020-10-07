@@ -28,12 +28,7 @@ en:
   table:
     header:
       planned_disbursement:
-        planned_disbursement_type: Type
-        period_start_date: Start date
-        period_end_date: End date
-        currency: Currency
-        providing_organisation: Provider
-        receiving_organisation: Receiver
+        financial_quarter_and_year: Financial quarter and year
         value: Forecasted spend amount
     body:
       planned_disbursement:

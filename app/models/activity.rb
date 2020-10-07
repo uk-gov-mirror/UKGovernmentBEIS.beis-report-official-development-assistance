@@ -106,6 +106,10 @@ class Activity < ApplicationRecord
     for_organisation.merge(projects.or(third_party_projects))
   }
 
+  def self.only_latest_planned_disbursements
+    planned_disbursements.select("DISTINCT ON (planned_disbursements.financial_year, planned_disbursements.financial_quarter) planned_disbursements.*").order(financial_year: :desc, financial_quarter: :desc, created_at: :desc)
+  end
+
   def self.by_roda_identifier(identifier)
     find_by(roda_identifier_compound: identifier)
   end
@@ -241,7 +245,7 @@ class Activity < ApplicationRecord
   end
 
   def forecasted_total_for_report_financial_quarter(report:)
-    @forecasted_total_for_report_financial_quarter ||= forecasted_total_for_date_range(range: report.created_at.all_quarter)
+    @forecasted_total_for_report_financial_quarter ||= forecasted_total_for_date_range(report: report)
   end
 
   def variance_for_report_financial_quarter(report:)
@@ -252,8 +256,8 @@ class Activity < ApplicationRecord
     !ingested? && (project? || third_party_project?)
   end
 
-  def forecasted_total_for_date_range(range:)
-    planned_disbursements.where(period_start_date: range).sum(:value)
+  def forecasted_total_for_date_range(report:)
+    planned_disbursements.only_latest.find_by(financial_year: report.financial_year, financial_quarter: report.financial_quarter).value
   end
 
   def requires_intended_beneficiaries?

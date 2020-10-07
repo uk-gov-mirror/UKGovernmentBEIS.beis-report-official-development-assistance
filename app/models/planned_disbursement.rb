@@ -19,6 +19,14 @@ class PlannedDisbursement < ApplicationRecord
 
   validate :revised_value_not_the_same_as_original, if: -> { planned_disbursement_type == "2" }
 
+  def self.latest_for_activity(activity)
+    where("parent_activity_id = ?", activity).select("DISTINCT ON (planned_disbursements.financial_year, planned_disbursements.financial_quarter) planned_disbursements.*").order(financial_year: :desc, financial_quarter: :desc, created_at: :desc)
+  end
+
+  def self.only_latest
+    select("DISTINCT ON (planned_disbursements.financial_year, planned_disbursements.financial_quarter) planned_disbursements.*").order(financial_year: :desc, financial_quarter: :desc, created_at: :desc)
+  end
+
   def unknown_receiving_organisation_type?
     receiving_organisation_type == "0"
   end
