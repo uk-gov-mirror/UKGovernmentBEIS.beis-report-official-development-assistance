@@ -8,6 +8,7 @@ en:
         success: Forecasted spend successfully updated
       revision:
         create:
+          button: Revise forecasted spend
           success: Forecasted spend successfully revised
   form:
     label:

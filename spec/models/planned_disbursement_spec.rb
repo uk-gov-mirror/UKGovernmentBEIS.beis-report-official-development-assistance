@@ -62,7 +62,7 @@ RSpec.describe PlannedDisbursement, type: :model do
     end
 
     context "when adding a revision" do
-      it "validates that the revised value is not the same as the prior version" do
+      it "does not allow a value that is the same as the prior version" do
         _original_planned_disbursement = create(
           :planned_disbursement,
           value: 11000,
