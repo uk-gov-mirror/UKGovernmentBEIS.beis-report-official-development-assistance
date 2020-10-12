@@ -15,6 +15,18 @@ class PlannedDisbursementPolicy < ApplicationPolicy
     false
   end
 
+  def revise?
+    return false if record.parent_activity.level.nil?
+    return true if beis_user? && record.parent_activity.programme?
+
+    if delivery_partner_user?
+      return false if update?
+      return true if editable_report_for_organisation_and_fund.present?
+    end
+
+    false
+  end
+
   def update?
     return false if record.parent_activity.level.nil?
     return true if beis_user? && record.parent_activity.programme?
