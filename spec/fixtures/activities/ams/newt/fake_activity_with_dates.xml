@@ -65,7 +65,7 @@
       <period-end iso-date="2023-06-30"/>
       <value currency="GBP" value-date="2020-07-01">148000</value>
     </budget>
-    <planned-disbursement type="2">
+    <planned-disbursement type="1">
       <period-start iso-date="2020-07-01"/>
       <period-end iso-date="2020-09-30"/>
       <value currency="GBP" value-date="2020-09-30">74000</value>

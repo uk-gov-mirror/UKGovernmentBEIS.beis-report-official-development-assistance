@@ -60,7 +60,7 @@
       <period-end iso-date="2018-01-01"/>
       <value value-date="2017-04-01">704000</value>
     </budget>
-    <planned-disbursement type="2">
+    <planned-disbursement type="1">
       <period-start iso-date="2019-10-01"/>
       <period-end iso-date="2019-12-31"/>
       <value value-date="2019-10-01">272416.6666666667</value>

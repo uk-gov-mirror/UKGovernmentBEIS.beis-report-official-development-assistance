@@ -17,7 +17,18 @@ class PlannedDisbursement < ApplicationRecord
     :financial_year
   validates :value, inclusion: {in: 0.01..99_999_999_999.00}
 
+  validate :revised_value_not_the_same_as_original, if: -> { planned_disbursement_type == "2" }
+
   def unknown_receiving_organisation_type?
     receiving_organisation_type == "0"
+  end
+
+  def revised_value_not_the_same_as_original
+    original_planned_disbursement = PlannedDisbursement.find_by(
+      planned_disbursement_type: "1",
+      financial_quarter: financial_quarter,
+      financial_year: financial_year
+    )
+    errors.add(:value, :revised_value_not_the_same_as_original) if original_planned_disbursement.value == value
   end
 end

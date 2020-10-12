@@ -58,3 +58,4 @@ en:
             value:
               inclusion: Value must be between 0.01 and 99,999,999,999.00
               not_a_number: "Value must be a valid number"
+              revised_value_not_the_same_as_original: "The revised forecasted spend cannot be the same as the prior forecasted spend"
