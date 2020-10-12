@@ -26,6 +26,50 @@ RSpec.describe PlannedDisbursement, type: :model do
         expect(transaction.valid?).to be true
       end
     end
+
+    context "when adding a revision" do
+      it "validates that the revised value is not the same as the prior version" do
+        _original_planned_disbursement = create(
+          :planned_disbursement,
+          value: 10000,
+          financial_quarter: 1,
+          financial_year: 2020,
+          planned_disbursement_type: "1"
+        )
+        revised_planned_disbursement = build(
+          :planned_disbursement,
+          value: 10000,
+          financial_quarter: 1,
+          financial_year: 2020,
+          planned_disbursement_type: "2"
+        )
+        expect(revised_planned_disbursement.valid?).to be false
+        expect(revised_planned_disbursement.errors.messages[:value]).to include(
+          t("activerecord.errors.models.planned_disbursement.attributes.value.revised_value_not_the_same_as_original")
+        )
+      end
+
+      it "does not check the prior version of a ingested planned disbursement" do
+        activity = create(:activity, ingested: true)
+        _original_planned_disbursement = create(
+          :planned_disbursement,
+          value: 10000,
+          financial_quarter: 1,
+          financial_year: 2020,
+          planned_disbursement_type: "1",
+          parent_activity: activity
+        )
+        revised_planned_disbursement = build(
+          :planned_disbursement,
+          value: 10000,
+          financial_quarter: 1,
+          financial_year: 2020,
+          planned_disbursement_type: "2",
+          parent_activity: activity
+        )
+        expect(revised_planned_disbursement.valid?).to be true
+      end
+    end
   end
 
   describe "#unknown_receiving_organisation_type?" do
