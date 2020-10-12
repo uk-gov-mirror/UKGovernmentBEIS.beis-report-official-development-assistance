@@ -28,4 +28,6 @@
 
         = f.govuk_text_field :value, width: 20, label: { text: "Revised forecasted spend" }
 
-        = f.govuk_submit t("default.button.submit")
+        = f.govuk_submit t("action.planned_disbursement.revision.create.button") do
+
+          = link_to "Cancel", organisation_activity_financials_path(@activity.organisation, @activity), class: ["govuk-button", "govuk-button--secondary", ""]
