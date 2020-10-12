@@ -16,6 +16,7 @@ RSpec.describe PlannedDisbursementPolicy do
       it { is_expected.to forbid_action(:create) }
       it { is_expected.to forbid_action(:edit) }
       it { is_expected.to forbid_action(:update) }
+      it { is_expected.to forbid_action(:revise) }
       it { is_expected.to forbid_action(:destroy) }
     end
 
@@ -23,10 +24,11 @@ RSpec.describe PlannedDisbursementPolicy do
       let(:activity) { create(:fund_activity, organisation: user.organisation) }
 
       it { is_expected.to permit_action(:show) }
+
       it { is_expected.to forbid_action(:create) }
       it { is_expected.to forbid_action(:edit) }
       it { is_expected.to forbid_action(:update) }
-
+      it { is_expected.to forbid_action(:revise) }
       it { is_expected.to forbid_action(:destroy) }
     end
 
@@ -37,6 +39,7 @@ RSpec.describe PlannedDisbursementPolicy do
       it { is_expected.to permit_action(:create) }
       it { is_expected.to permit_action(:edit) }
       it { is_expected.to permit_action(:update) }
+      it { is_expected.to permit_action(:revise) }
 
       it { is_expected.to forbid_action(:destroy) }
     end
@@ -49,6 +52,7 @@ RSpec.describe PlannedDisbursementPolicy do
       it { is_expected.to forbid_action(:create) }
       it { is_expected.to forbid_action(:edit) }
       it { is_expected.to forbid_action(:update) }
+      it { is_expected.to forbid_action(:revise) }
       it { is_expected.to forbid_action(:destroy) }
     end
 
@@ -60,6 +64,7 @@ RSpec.describe PlannedDisbursementPolicy do
       it { is_expected.to forbid_action(:create) }
       it { is_expected.to forbid_action(:edit) }
       it { is_expected.to forbid_action(:update) }
+      it { is_expected.to forbid_action(:revise) }
       it { is_expected.to forbid_action(:destroy) }
     end
   end
@@ -75,6 +80,7 @@ RSpec.describe PlannedDisbursementPolicy do
       it { is_expected.to forbid_action(:create) }
       it { is_expected.to forbid_action(:edit) }
       it { is_expected.to forbid_action(:update) }
+      it { is_expected.to forbid_action(:revise) }
       it { is_expected.to forbid_action(:destroy) }
     end
 
@@ -86,6 +92,7 @@ RSpec.describe PlannedDisbursementPolicy do
       it { is_expected.to forbid_action(:create) }
       it { is_expected.to forbid_action(:edit) }
       it { is_expected.to forbid_action(:update) }
+      it { is_expected.to forbid_action(:revise) }
       it { is_expected.to forbid_action(:destroy) }
     end
 
@@ -97,6 +104,7 @@ RSpec.describe PlannedDisbursementPolicy do
       it { is_expected.to forbid_action(:create) }
       it { is_expected.to forbid_action(:edit) }
       it { is_expected.to forbid_action(:update) }
+      it { is_expected.to forbid_action(:revise) }
       it { is_expected.to forbid_action(:destroy) }
     end
 
@@ -108,6 +116,7 @@ RSpec.describe PlannedDisbursementPolicy do
         it { is_expected.to forbid_action(:create) }
         it { is_expected.to forbid_action(:edit) }
         it { is_expected.to forbid_action(:update) }
+        it { is_expected.to forbid_action(:revise) }
         it { is_expected.to forbid_action(:destroy) }
       end
 
@@ -124,6 +133,7 @@ RSpec.describe PlannedDisbursementPolicy do
           it { is_expected.to forbid_action(:create) }
           it { is_expected.to forbid_action(:edit) }
           it { is_expected.to forbid_action(:update) }
+          it { is_expected.to forbid_action(:revise) }
           it { is_expected.to forbid_action(:destroy) }
         end
 
@@ -136,6 +146,7 @@ RSpec.describe PlannedDisbursementPolicy do
             it { is_expected.to forbid_action(:create) }
             it { is_expected.to forbid_action(:edit) }
             it { is_expected.to forbid_action(:update) }
+            it { is_expected.to forbid_action(:revise) }
             it { is_expected.to forbid_action(:destroy) }
           end
 
@@ -149,6 +160,7 @@ RSpec.describe PlannedDisbursementPolicy do
             it { is_expected.to forbid_action(:create) }
             it { is_expected.to forbid_action(:edit) }
             it { is_expected.to forbid_action(:update) }
+            it { is_expected.to forbid_action(:revise) }
             it { is_expected.to forbid_action(:destroy) }
           end
 
@@ -160,6 +172,7 @@ RSpec.describe PlannedDisbursementPolicy do
             context "when the report is not the one in which the planned disbursement was created" do
               it { is_expected.to permit_action(:show) }
               it { is_expected.to permit_action(:create) }
+              it { is_expected.to permit_action(:revise) }
 
               it { is_expected.to forbid_action(:edit) }
               it { is_expected.to forbid_action(:update) }
@@ -177,6 +190,7 @@ RSpec.describe PlannedDisbursementPolicy do
               it { is_expected.to permit_action(:update) }
 
               it { is_expected.to forbid_action(:destroy) }
+              it { is_expected.to forbid_action(:revise) }
             end
           end
         end
