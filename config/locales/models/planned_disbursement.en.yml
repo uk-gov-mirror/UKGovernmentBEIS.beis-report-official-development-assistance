@@ -6,6 +6,9 @@ en:
         success: Forecasted spend successfully created
       update:
         success: Forecasted spend successfully updated
+      revision:
+        create:
+          success: Forecasted spend successfully revised
   form:
     label:
       planned_disbursement:
@@ -45,6 +48,8 @@ en:
     planned_disbursement:
       edit: Edit forecasted spend
       new: Add forecasted spend
+      revision:
+        new: Revise forecasted spend
   activerecord:
     errors:
       models:
