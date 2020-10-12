@@ -47,5 +47,19 @@ RSpec.feature "Users can revise planned disbursments" do
       expect(page).to have_content original_planned_disbursement_presenter.financial_quarter_and_year
       expect(page).to have_content original_planned_disbursement_presenter.value
     end
+
+    scenario "they can cancel a revision" do
+      activity = create(:project_activity, organisation: user.organisation)
+      prior_report = create(:report, organisation: user.organisation, fund: activity.associated_fund, state: :approved)
+      _active_report = create(:report, organisation: user.organisation, fund: activity.associated_fund, state: :active)
+      _original_planned_disbursement = create(:planned_disbursement, parent_activity: activity, report: prior_report)
+
+      visit organisation_activity_financials_path(activity.organisation, activity)
+      click_on "Revise forecasted spend"
+      click_on t("default.button.cancel")
+
+      expect(page).not_to have_content t("action.planned_disbursement.revision.create.success")
+      expect(activity.planned_disbursements.count).to eq 1
+    end
   end
 end

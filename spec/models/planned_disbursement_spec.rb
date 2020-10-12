@@ -29,7 +29,7 @@ RSpec.describe PlannedDisbursement, type: :model do
 
     context "when adding a revision" do
       it "does not allow a value that is the same as the prior version" do
-        original_planned_disbursement = create(
+        _original_planned_disbursement = create(
           :planned_disbursement,
           value: 10000,
           financial_quarter: 1,
