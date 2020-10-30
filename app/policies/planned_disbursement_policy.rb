@@ -27,6 +27,14 @@ class PlannedDisbursementPolicy < ApplicationPolicy
     false
   end
 
+  def edit_revision?
+    update? && record.revised?
+  end
+
+  def edit_original?
+    update? && record.original?
+  end
+
   def update?
     return false if record.parent_activity.level.nil?
     return true if beis_user? && record.parent_activity.programme?

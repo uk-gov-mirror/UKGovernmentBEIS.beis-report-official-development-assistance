@@ -503,7 +503,7 @@ RSpec.describe ActivityPresenter do
       last_financial_quarter = Date.parse("2020-04-01")
       next_financial_quarter = Date.parse("2020-10-01")
       _disbursement_1 = create(:planned_disbursement, parent_activity: project, value: 200.20, period_start_date: current_financial_quarter, financial_quarter: 2, financial_year: 2020)
-      _disbursement_2 = create(:planned_disbursement, parent_activity: project, value: 1500, period_start_date: last_financial_quarter, financial_quarter: 1, financial_year: 2019)
+      _disbursement_2 = create(:planned_disbursement, parent_activity: project, value: 1500, period_start_date: last_financial_quarter, financial_quarter: 1, financial_year: 2020)
 
       expect(described_class.new(project).forecasted_total_for_date_range(range: current_financial_quarter.all_quarter))
         .to eq "200.20"

@@ -376,6 +376,7 @@
 - Option `No - was never eligible` added to ODA eligibility form step
 - Two original planned disbursements for the same activity, financial quarter
   and year cannot be created.
+- Revised planned disbursements can be edited
 
 [unreleased]: https://github.com/UKGovernmentBEIS/beis-report-official-development-assistance/compare/release-21...HEAD
 [release-21]: https://github.com/UKGovernmentBEIS/beis-report-official-development-assistance/compare/release-20...release-21

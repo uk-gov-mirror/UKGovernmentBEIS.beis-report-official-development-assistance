@@ -10,6 +10,8 @@ en:
         create:
           button: Revise forecasted spend
           success: Forecasted spend successfully revised
+        update:
+          success: Revised forecasted spend successfully updated
   form:
     label:
       planned_disbursement:
@@ -45,6 +47,7 @@ en:
       edit: Edit forecasted spend
       new: Add forecasted spend
       revision:
+        edit: Edit revised forecasted spend
         new: Revise forecasted spend
   activerecord:
     errors:

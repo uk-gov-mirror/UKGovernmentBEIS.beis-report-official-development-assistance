@@ -29,7 +29,9 @@
           %td.govuk-table__cell= planned_disbursement.providing_organisation_name
           %td.govuk-table__cell= planned_disbursement.receiving_organisation_name
           %td.govuk-table__cell
-            - if policy(planned_disbursement).edit?
-              = a11y_action_link(t('default.link.edit'), edit_activity_planned_disbursement_path(planned_disbursement.parent_activity, planned_disbursement), t("table.body.planned_disbursement.edit_noun"))
+            - if policy(planned_disbursement).edit_original?
+              = a11y_action_link("Edit original forecasted spend", edit_activity_planned_disbursement_path(planned_disbursement.parent_activity, planned_disbursement), t("table.body.planned_disbursement.edit_noun"))
+            - if policy(planned_disbursement).edit_revision?
+              = link_to "Edit revised forecasted spend", edit_activity_planned_disbursement_revision_path(planned_disbursement.parent_activity, planned_disbursement)
             - if policy(planned_disbursement).revise?
               = link_to "Revise forecasted spend", new_activity_planned_disbursement_revision_path(planned_disbursement.parent_activity, planned_disbursement)

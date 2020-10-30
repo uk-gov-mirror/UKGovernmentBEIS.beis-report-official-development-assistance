@@ -40,7 +40,7 @@ Rails.application.routes.draw do
 
     concern :disbursement_plannable do
       resources :planned_disbursements, only: [:new, :create, :edit, :update] do
-        resource :revision, only: [:new, :create], controller: :planned_disbursements_revisions
+        resource :revision, only: [:new, :create, :edit, :update], controller: :planned_disbursements_revisions
       end
     end
 
