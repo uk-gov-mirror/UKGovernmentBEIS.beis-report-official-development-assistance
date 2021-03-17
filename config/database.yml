@@ -7,9 +7,11 @@ default: &default
 
 development:
   <<: *default
+  database: roda-development
 
 test:
   <<: *default
+  database: roda_test
 
 production:
   <<: *default

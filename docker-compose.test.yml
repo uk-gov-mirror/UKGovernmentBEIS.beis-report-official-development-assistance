@@ -12,7 +12,7 @@ services:
       - db
     environment:
       DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: "true"
-      DATABASE_URL: postgres://postgres:password@db:5432/roda_test
+      DATABASE_URL: postgres://postgres:password@db:5432
     env_file:
       - .env.test
   db:
