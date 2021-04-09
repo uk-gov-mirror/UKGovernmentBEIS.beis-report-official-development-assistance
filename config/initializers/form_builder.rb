@@ -1,3 +1,5 @@
+require "./lib/roda/form_builder/builder"
+
 Rails.application.config.action_view.default_form_builder = GOVUKDesignSystemFormBuilder::FormBuilder
 
 # Don't use XHR when submitting forms
@@ -45,6 +47,11 @@ module GOVUKDesignSystemFormBuilder
 end
 
 module GOVUKDesignSystemFormBuilder
+  class FormBuilder < ActionView::Helpers::FormBuilder
+    delegate :content_tag, :tag, :safe_join, :link_to, :capture, to: :@template
+
+    include Roda::FormBuilder::Builder
+  end
   module Elements
     class Select < GOVUKDesignSystemFormBuilder::Base
       def error_element
