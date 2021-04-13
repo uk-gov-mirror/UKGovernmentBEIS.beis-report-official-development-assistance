@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_12_165439) do
+ActiveRecord::Schema.define(version: 2021_04_13_123839) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -120,7 +120,9 @@ ActiveRecord::Schema.define(version: 2021_04_12_165439) do
     t.string "providing_organisation_name"
     t.string "providing_organisation_type"
     t.string "providing_organisation_reference"
+    t.uuid "providing_organisation_id"
     t.index ["parent_activity_id"], name: "index_budgets_on_parent_activity_id"
+    t.index ["providing_organisation_id"], name: "index_budgets_on_providing_organisation_id"
     t.index ["report_id"], name: "index_budgets_on_report_id"
   end
 
@@ -254,6 +256,7 @@ ActiveRecord::Schema.define(version: 2021_04_12_165439) do
   add_foreign_key "activities", "organisations", column: "reporting_organisation_id"
   add_foreign_key "activities", "organisations", on_delete: :restrict
   add_foreign_key "budgets", "activities", column: "parent_activity_id", on_delete: :cascade
+  add_foreign_key "budgets", "organisations", column: "providing_organisation_id"
   add_foreign_key "planned_disbursements", "activities", column: "parent_activity_id", on_delete: :cascade
   add_foreign_key "transactions", "activities", column: "parent_activity_id", on_delete: :cascade
   add_foreign_key "transfers", "activities", column: "destination_id", on_delete: :restrict

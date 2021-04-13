@@ -8,6 +8,7 @@ class Budget < ApplicationRecord
 
   belongs_to :parent_activity, class_name: "Activity"
   belongs_to :report, optional: true
+  belongs_to :providing_organisation, class_name: "Organisation", optional: true
 
   validates_presence_of :report, unless: -> { parent_activity&.organisation&.service_owner? }
   validates_presence_of :value,
