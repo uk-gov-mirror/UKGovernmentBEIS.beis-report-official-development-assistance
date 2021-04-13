@@ -18,6 +18,10 @@ class CreateBudget
       budget.report = editable_report_for_activity(activity: activity)
     end
 
+    if Budget::DIRECT_BUDGET_TYPES.include?(budget.budget_type)
+      budget.providing_organisation_id = Organisation.find_by(service_owner: true).id
+    end
+
     result = if budget.valid?
       Result.new(budget.save, budget)
     else
