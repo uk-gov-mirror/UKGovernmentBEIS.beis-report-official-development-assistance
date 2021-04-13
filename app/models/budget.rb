@@ -19,6 +19,8 @@ class Budget < ApplicationRecord
   validates :budget_type, inclusion: {in: BUDGET_TYPES.values}
   validate :direct_budget_type_must_match_source_fund, if: -> { DIRECT_BUDGET_TYPES.include?(budget_type) }
   validates_presence_of :providing_organisation_id, if: -> { (DIRECT_BUDGET_TYPES + TRANSFERRED_BUDGET_TYPES).include?(budget_type) }
+  validates_presence_of :providing_organisation_name, unless: -> { (DIRECT_BUDGET_TYPES + TRANSFERRED_BUDGET_TYPES).include?(budget_type) }
+  validate :direct_budget_providing_org_must_be_beis, if: -> { DIRECT_BUDGET_TYPES.include?(budget_type) }
 
   def financial_year
     return nil if self[:financial_year].nil?
@@ -47,5 +49,9 @@ class Budget < ApplicationRecord
     unless budget_type == parent_activity.source_fund_code
       errors.add(:budget_type, I18n.t("activerecord.errors.models.budget.attributes.funding_type.source_fund.#{parent_activity.source_fund_code}"))
     end
+  end
+
+  private def direct_budget_providing_org_must_be_beis
+    errors.add(:providing_organisation_name, "Providing organisation for direct funding must be BEIS!") unless providing_organisation&.service_owner?
   end
 end

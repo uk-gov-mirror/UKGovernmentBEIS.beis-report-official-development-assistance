@@ -71,3 +71,7 @@ en:
                 2: You cannot assign Newton budget to a GCRF funded activity.
             financial_year:
               blank: Select a financial year
+            providing_organisation_id:
+              blank: Select the organisation that provides the transferred budget
+            providing_organisation_name:
+              blank: Enter the name of the providing organisation
