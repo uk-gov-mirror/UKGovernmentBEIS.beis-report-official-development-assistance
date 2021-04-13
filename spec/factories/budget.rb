@@ -7,5 +7,8 @@ FactoryBot.define do
     ingested { false }
     association :parent_activity, factory: :activity
     association :report, factory: :report
+    providing_organisation_name { "Department for Business, Energy & Industrial Strategy" }
+    providing_organisation_reference { "GB-GOV-13" }
+    providing_organisation_type { "10" }
   end
 end
