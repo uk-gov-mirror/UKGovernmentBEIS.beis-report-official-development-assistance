@@ -5,6 +5,7 @@ class Budget < ApplicationRecord
   IATI_STATUSES = Codelist.new(type: "budget_status", source: "iati").hash_of_coded_names
   BUDGET_TYPES = Codelist.new(type: "budget_type", source: "beis").hash_of_coded_names
   DIRECT_BUDGET_TYPES = [BUDGET_TYPES["direct_newton_fund"], BUDGET_TYPES["direct_global_challenges_research_fund"]]
+  TRANSFERRED_BUDGET_TYPES = [BUDGET_TYPES["transferred"]]
 
   belongs_to :parent_activity, class_name: "Activity"
   belongs_to :report, optional: true
@@ -17,6 +18,7 @@ class Budget < ApplicationRecord
   validates :value, numericality: {other_than: 0, less_than_or_equal_to: 99_999_999_999.00}
   validates :budget_type, inclusion: {in: BUDGET_TYPES.values}
   validate :direct_budget_type_must_match_source_fund, if: -> { DIRECT_BUDGET_TYPES.include?(budget_type) }
+  validates_presence_of :providing_organisation_id, if: -> { (DIRECT_BUDGET_TYPES + TRANSFERRED_BUDGET_TYPES).include?(budget_type) }
 
   def financial_year
     return nil if self[:financial_year].nil?
