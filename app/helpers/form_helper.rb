@@ -1,7 +1,6 @@
 module FormHelper
   def list_of_organisations
-    @list_of_organisations ||=
-      [OpenStruct.new(name: "", id: ""), Organisation.sorted_by_name].flatten
+    @list_of_organisations ||= Organisation.sorted_by_name
   end
 
   def list_of_delivery_partners

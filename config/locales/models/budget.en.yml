@@ -18,6 +18,7 @@ en:
       budget:
         budget_type: Type
         providing_organisation: Providing organisation
+        providing_organisation_id: Providing organisation
     prompt:
       budget:
         financial_year: Select a financial year
