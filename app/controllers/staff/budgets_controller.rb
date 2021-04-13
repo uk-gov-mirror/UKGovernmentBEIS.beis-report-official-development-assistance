@@ -66,6 +66,7 @@ class Staff::BudgetsController < Staff::BaseController
       :financial_year,
       :currency,
       :funding_type,
+      :providing_organisation_id,
       :providing_organisation_name,
       :providing_organisation_type,
       :providing_organisation_reference
