@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Budget do
+  let!(:service_owner) { create(:beis_organisation) }
+
   subject { build(:budget) }
 
   describe "relations" do
@@ -37,6 +39,32 @@ RSpec.describe Budget do
         it { is_expected.to allow_value(3).for(:budget_type) }
         it { is_expected.to allow_value(4).for(:budget_type) }
         it { is_expected.to allow_value(5).for(:budget_type) }
+      end
+    end
+
+    describe "providing organisation" do
+      context "when the budget_type is a direct type" do
+        let(:another_org) { create(:delivery_partner_organisation) }
+
+        subject { build(:budget, providing_organisation_id: another_org.id, parent_activity: build(:programme_activity)) }
+
+        it "sets the providing_organisation_id to that of the service_owner" do
+          subject.valid?
+
+          expect(subject.providing_organisation_id).to eql(service_owner.id)
+        end
+      end
+
+      context "when the budget type is Transferred" do
+        subject { build(:budget, budget_type: Budget::BUDGET_TYPES["transferred"], parent_activity: build(:programme_activity)) }
+
+        it { is_expected.not_to allow_value(nil).for(:providing_organisation_id) }
+      end
+
+      context "when the budget_type is external" do
+        subject { build(:budget, budget_type: Budget::BUDGET_TYPES["external"], parent_activity: build(:programme_activity)) }
+
+        it { is_expected.not_to allow_value(nil).for(:providing_organisation_name) }
       end
     end
 
