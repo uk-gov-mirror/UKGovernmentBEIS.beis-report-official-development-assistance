@@ -11,12 +11,19 @@ en:
       budget:
         value: Budget amount
         financial_year: Financial year
+        providing_organisation_name: Providing organisation name
+        providing_organisation_type: Providing organisation type
+        providing_organisation_reference: International Aid Transparency Initiative (IATI) Reference (optional)
     legend:
       budget:
         budget_type: Type
+        providing_organisation: Providing organisation
     prompt:
       budget:
         financial_year: Select a financial year
+    hint:
+      budget:
+        providing_organisation: The organisation where the budget is coming from.
   table:
     header:
       budget:
