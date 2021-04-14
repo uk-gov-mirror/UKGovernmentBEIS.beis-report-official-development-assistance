@@ -14,3 +14,28 @@
 //= require rails-ujs
 //= require govuk-frontend/govuk/all
 //= require_tree .
+
+/*
+document.addEventListener("DOMContentLoaded", function() {
+  var budgetTypeRadios = document.querySelectorAll('input[name="budget[budget_type]"].govuk-radios__input');
+
+  var transferredBudgets = [3];
+  var externalBudgets = [4, 5];
+
+  budgetTypeRadios.forEach((elem) => {
+    elem.addEventListener("change", function(event) {
+      var item = event.target.value;
+      console.log(item);
+
+      if(item == 3) {
+        // show providing org select
+        document.querySelector("#providing-org-select");
+      }
+
+      if(item == 4 || item == 5) {
+        // show providing org freeform fields
+      }
+    });
+  })
+})
+*/
