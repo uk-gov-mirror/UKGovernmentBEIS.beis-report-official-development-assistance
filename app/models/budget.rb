@@ -11,6 +11,8 @@ class Budget < ApplicationRecord
   belongs_to :report, optional: true
   belongs_to :providing_organisation, class_name: "Organisation", optional: true
 
+  before_validation :infer_and_assign_providing_org_attrs
+
   validates_presence_of :report, unless: -> { parent_activity&.organisation&.service_owner? }
   validates_presence_of :value,
     :currency,
@@ -52,6 +54,21 @@ class Budget < ApplicationRecord
   end
 
   private def direct_budget_providing_org_must_be_beis
-    errors.add(:providing_organisation_name, "Providing organisation for direct funding must be BEIS!") unless providing_organisation&.service_owner?
+    errors.add(:providing_organisation_name, "Providing organisation for direct funding must be BEIS!") unless providing_organisation_id == Organisation.service_owner.id
+  end
+
+  private def infer_and_assign_providing_org_attrs
+    if DIRECT_BUDGET_TYPES.include?(budget_type)
+      self.providing_organisation_id = Organisation.service_owner.id
+      self.providing_organisation_name = nil
+      self.providing_organisation_type = nil
+      self.providing_organisation_reference = nil
+    elsif TRANSFERRED_BUDGET_TYPES.include?(budget_type)
+      self.providing_organisation_name = nil
+      self.providing_organisation_type = nil
+      self.providing_organisation_reference = nil
+    else
+      self.providing_organisation_id = nil
+    end
   end
 end
