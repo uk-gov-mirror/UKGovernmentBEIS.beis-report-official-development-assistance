@@ -76,5 +76,6 @@ class Staff::BudgetsController < Staff::BaseController
   def set_budget_defaults
     @budget.parent_activity = @activity
     @budget.budget_type = @activity.source_fund_code
+    @budget.providing_organisation_id = Organisation.service_owner.id
   end
 end
