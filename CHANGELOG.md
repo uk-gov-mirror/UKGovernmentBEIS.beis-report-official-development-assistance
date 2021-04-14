@@ -594,6 +594,7 @@
 
 - Allow forecasts to have negative values
 - Add links to Guidance for all Activity fields that have guidance
+- Create a [pattern library](doc/patterns.md) for developers
 
 [unreleased]: https://github.com/UKGovernmentBEIS/beis-report-official-development-assistance/compare/release-44...HEAD
 [release-44]: https://github.com/UKGovernmentBEIS/beis-report-official-development-assistance/compare/release-43...release-44
