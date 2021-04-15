@@ -60,6 +60,13 @@ RSpec.describe Budget do
 
         it { is_expected.not_to allow_value(nil).for(:providing_organisation_id) }
       end
+
+      context "when the budget_type is external" do
+        subject { build(:budget, budget_type: Budget::BUDGET_TYPES["external"], parent_activity: build(:programme_activity)) }
+
+        it { is_expected.not_to allow_value(nil).for(:providing_organisation_name) }
+        it { is_expected.not_to allow_value(nil).for(:providing_organisation_type) }
+      end
     end
 
     context "when the activity belongs to a delivery partner" do
