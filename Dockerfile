@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
 # base
 # ------------------------------------------------------------------------------
-FROM ruby:2.6.3 AS base
+FROM ruby:2.7.3 AS base
 MAINTAINER dxw <rails@dxw.com>
 
 RUN apt-get update && apt-get install -qq -y \
@@ -27,7 +27,7 @@ WORKDIR ${DEPS_HOME}
 # End
 
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
-        && apt-get install -y nodejs
+  && apt-get install -y nodejs
 
 # Install Ruby dependencies
 COPY Gemfile ${DEPS_HOME}/Gemfile
